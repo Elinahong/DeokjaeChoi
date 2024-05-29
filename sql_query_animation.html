@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SQL Query Animation</title>
+    <style>
+        body { font-family: monospace; background-color: #f4f4f4; color: #333; padding: 20px; background-color: #f4f4f4; color: #333; padding: 20px; }
+        .typing-container { white-space: pre; border: 1px solid #ccc; padding: 10px; background-color: #fff; }
+        .result-container { margin-top: 20px; border: 1px solid #ccc; padding: 10px; background-color: #fff; }
+        .line { display: block; }
+        @keyframes typing { from { width: 0; } to { width: 100%; } }
+        @keyframes caret { from { border-right-color: transparent; } to { border-right-color: black; } }
+        .typing::after {
+            content: '';
+            border-right: .1em solid black;
+            animation: caret .5s step-end infinite;
+        }
+    </style>
+</head>
+<body>
+    <h1>SQL Query Animation and Result</h1>
+    <div class="typing-container">
+        <code id="sql-code" class="typing"></code>
+    </div>
+    <div class="result-container">
+        <h2>Result:</h2>
+        <pre id="sql-result"></pre>
+    </div>
+
+    <script>
+        const sqlCode = `-- Create a table to store the conditional parts of the message
+CREATE TABLE 은서가_덕재에게 (
+    id INT PRIMARY KEY,
+    condition VARCHAR(255),
+    message VARCHAR(255)
+);
+
+-- Insert conditional parts into the table
+INSERT INTO 은서가_덕재에게 (id, condition, message) VALUES
+(1, '100일이벤트', '많이 많이 좋아해');
+
+-- Select the message based on a specific condition and insert it into the heart shape
+WITH HeartShape AS (
+    SELECT 1 AS line_num, '  *   *        *    *  ' AS line
+    UNION ALL
+    SELECT 2, ' *     *      *       * ' AS line
+    UNION ALL
+    SELECT 3, '*        *  *            *' AS line
+    UNION ALL
+    SELECT 4, '*           *             *' AS line
+    UNION ALL
+    SELECT 5, ' *                       * ' AS line
+    UNION ALL
+    SELECT 6, '  *  많이 많이 좋아해  *  ' AS line
+    UNION ALL
+    SELECT 7, '   *                  *   ' AS line
+    UNION ALL
+    SELECT 8, '    *               *    ' AS line
+    UNION ALL
+    SELECT 9, '     *            *     ' AS line
+    UNION ALL
+    SELECT 10, '       *        *      ' AS line
+    UNION ALL
+    SELECT 11, '         *    *        ' AS line
+    UNION ALL
+    SELECT 12, '            *          ' AS line
+),
+Message AS (
+    SELECT message
+    FROM 은서가_덕재에게
+    WHERE condition = '100일이벤트'
+)
+SELECT
+    CASE
+        WHEN line_num = 6 THEN '  *  ' || (SELECT message FROM Message) || '  *  '
+        ELSE line
+    END AS Line
+FROM HeartShape
+ORDER BY line_num;`;
+
+        const sqlResult = `  *   *        *    *  
+ *     *      *       * 
+*        *  *            *
+*           *             *
+ *                       * 
+  *  많이 많이 좋아해  *  
+   *                  *   
+    *               *    
+     *            *     
+       *        *      
+         *    *        
+            *          `;
+
+        let i = 0;
+        function typeWriter() {
+            if (i < sqlCode.length) {
+                document.getElementById("sql-code").innerHTML += sqlCode.charAt(i);
+                i++;
+                setTimeout(typeWriter, 30);
+            } else {
+                document.getElementById("sql-result").textContent = sqlResult;
+            }
+        }
+
+        typeWriter();
+    </script>
+</body>
+</html>
